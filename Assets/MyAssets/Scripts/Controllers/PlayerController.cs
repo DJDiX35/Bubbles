@@ -80,17 +80,17 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 CheckOutOfBounds(Vector3 position, float accuracy)
     {
-        // по иксу уровень зациклен. Улетели за границу - появились с другой стороны.
+        // РїРѕ РёРєСЃСѓ СѓСЂРѕРІРµРЅСЊ Р·Р°С†РёРєР»РµРЅ. вЂќР»РµС‚РµР»Рё Р·Р° РіСЂР°РЅРёС†Сѓ - РїРѕВ¤РІРёР»РёСЃСЊ СЃ РґСЂСѓРіРѕР№ СЃС‚РѕСЂРѕРЅС‹.
         if (position.x < -_bounds.x) position.x = _bounds.x - accuracy;
         if (position.x > _bounds.x) position.x = -_bounds.x + accuracy;
 
-        // по y - либо зацикленность либо упираемся и не идем дальше, на выбор. Расскомментировать необходимое.
+        // РїРѕ y - Р»РёР±Рѕ Р·Р°С†РёРєР»РµРЅРЅРѕСЃС‚СЊ Р»РёР±Рѕ СѓРїРёСЂР°РµРјСЃВ¤ Рё РЅРµ РёРґРµРј РґР°Р»СЊС€Рµ, РЅР° РІС‹Р±РѕСЂ. вЂ“Р°СЃСЃРєРѕРјРјРµРЅС‚РёСЂРѕРІР°С‚СЊ РЅРµРѕР±С…РѕРґРёРјРѕРµ.
 
-        // зацикленность
+        // Р·Р°С†РёРєР»РµРЅРЅРѕСЃС‚СЊ
         /*if (position.y < -_bounds.y) position.y = _bounds.y - accuracy;
         if (position.y > _bounds.y) position.y = -_bounds.y + accuracy;*/
 
-        // жесткая граница
+        // Р¶РµСЃС‚РєР°В¤ РіСЂР°РЅРёС†Р°
         if (position.y < -_bounds.y + 0.1f)
         {
             position.y = -_bounds.y + 0.1f + accuracy;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Универсальный мультипроектный класс
+// РЈРЅРёРІРµСЂСЃР°Р»СЊРЅС‹Р№ РјСѓР»СЊС‚РёРїСЂРѕРµРєС‚РЅС‹Р№ РєР»Р°СЃСЃ
 [System.Serializable]
 public class MinMaxTypes
 {

@@ -1,5 +1,5 @@
 //
-// Универсальный контроллер управления с клавиатуры
+// РЈРЅРёРІРµСЂСЃР°Р»СЊРЅС‹Р№ РєРѕРЅС‚СЂРѕР»Р»РµСЂ СѓРїСЂР°РІР»РµРЅРёСЏ СЃ РєР»Р°РІРёР°С‚СѓСЂС‹
 //
 
 using UnityEngine;
@@ -45,7 +45,7 @@ public class KeyboardInput : InputBase
         }
         if (Input.GetKey(KeyCode.W))
         {
-            if (direction.y < _maxSpeed) direction.y += _acceleration * 1.5f * Time.deltaTime; // мы - пузырь. Подъем всегда легче чем спуск.
+            if (direction.y < _maxSpeed) direction.y += _acceleration * 1.5f * Time.deltaTime; // Г¬Г» - ГЇГіГ§Г»Г°Гј. ГЏГ®Г¤ГєГҐГ¬ ГўГ±ГҐГЈГ¤Г  Г«ГҐГЈГ·ГҐ Г·ГҐГ¬ Г±ГЇГіГ±ГЄ.
         }
         if (Input.GetKey(KeyCode.S))
         {
@@ -61,19 +61,19 @@ public class KeyboardInput : InputBase
     }
 
     /// <summary>
-    /// Если все кнопки отпущены - постепенно замедляем движение
+    /// Р•СЃР»Рё РІСЃРµ РєРЅРѕРїРєРё РѕС‚РїСѓС‰РµРЅС‹ - РїРѕСЃС‚РµРїРµРЅРЅРѕ Р·Р°РјРµРґР»СЏРµРј РґРІРёР¶РµРЅРёРµ
     /// </summary>
     private void SlowDownAtKeyRelease()
     {
-        // замедление по оси X
+        // Р·Р°РјРµРґР»РµРЅРёРµ РїРѕ РѕСЃРё X
         if (direction.x != 0 && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
         {
             direction.x = Mathf.MoveTowards(direction.x, 0, _acceleration * 2f * Time.deltaTime);
         }
-        // замедление по оси Y
+        // Р·Р°РјРµРґР»РµРЅРёРµ РїРѕ РѕСЃРё Y
         if (direction.y != 0 && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
         {
-            // так как у нас в управлении пузырь - замедление вниз более активное, чем вверх
+            // С‚Р°Рє РєР°Рє Сѓ РЅР°СЃ РІ СѓРїСЂР°РІР»РµРЅРёРё РїСѓР·С‹СЂСЊ - Р·Р°РјРµРґР»РµРЅРёРµ РІРЅРёР· Р±РѕР»РµРµ Р°РєС‚РёРІРЅРѕРµ, С‡РµРј РІРІРµСЂС…
             if (direction.y > 0)
                 direction.y = Mathf.MoveTowards(direction.y, 0, _acceleration * 0.5f * Time.deltaTime);
             else

@@ -1,3 +1,8 @@
+//
+// Пул пузырей.
+// Работает больше как модель, т.к. занимается только хранением и созданием/выдачей объектов-пузырей по требованию.
+//
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

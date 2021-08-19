@@ -9,14 +9,14 @@ public class BubblesController : MonoBehaviour
     private Timer _timer;
     private float _spawnDelay;
 
-    private int _spawnCount = 1; // каунтер на спавн после первых заспавленных пузырей
+    private int _spawnCount = 1; // РєР°СѓРЅС‚РµСЂ РЅР° СЃРїР°РІРЅ РїРѕСЃР»Рµ РїРµСЂРІС‹С… Р·Р°СЃРїР°РІР»РµРЅРЅС‹С… РїСѓР·С‹СЂРµР№
 
     private Vector2 _spawnBorders = new Vector2(1, 1);
 
     private List<PopUpObject> _objects = new List<PopUpObject>();
     private List<PopUpObject> _toRemove = new List<PopUpObject>();
 
-    private bool active = false;    // Временное решение чтобы избежать выполнения Update ДО инициализации. Придумаю вариант лучше - заменю. выключать скрипт в редакторе заранее считаю некрасивым.
+    private bool active = false;    // Р’СЂРµРјРµРЅРЅРѕРµ СЂРµС€РµРЅРёРµ С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РІС‹РїРѕР»РЅРµРЅРёСЏ Update Р”Рћ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё. РџСЂРёРґСѓРјР°СЋ РІР°СЂРёР°РЅС‚ Р»СѓС‡С€Рµ - Р·Р°РјРµРЅСЋ. РІС‹РєР»СЋС‡Р°С‚СЊ СЃРєСЂРёРїС‚ РІ СЂРµРґР°РєС‚РѕСЂРµ Р·Р°СЂР°РЅРµРµ СЃС‡РёС‚Р°СЋ РЅРµРєСЂР°СЃРёРІС‹Рј.
 
     public void Init(
         Settings settings,
@@ -53,7 +53,7 @@ public class BubblesController : MonoBehaviour
 
 
     /// <summary>
-    /// Update. Не терем, он тут.
+    /// Update. РќРµ С‚РµСЂРµРј, РѕРЅ С‚СѓС‚.
     /// </summary>
     void Update()
     {
@@ -90,7 +90,7 @@ public class BubblesController : MonoBehaviour
     }
 
     /// <summary>
-    /// Удаляем пузырьки находящиеся в списке "на удаление".
+    /// РЈРґР°Р»СЏРµРј РїСѓР·С‹СЂСЊРєРё РЅР°С…РѕРґСЏС‰РёРµСЃСЏ РІ СЃРїРёСЃРєРµ "РЅР° СѓРґР°Р»РµРЅРёРµ".
     /// </summary>
     private void ClearTrashCan()
     {

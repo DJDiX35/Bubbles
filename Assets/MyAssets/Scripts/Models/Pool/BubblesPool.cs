@@ -30,10 +30,10 @@ public class BubblesPool : MonoBehaviour
 
     private void FillPool()
     {
-        // проходимся по списку префабов
+        // РїСЂРѕС…РѕРґРёРјСЃСЏ РїРѕ СЃРїРёСЃРєСѓ РїСЂРµС„Р°Р±РѕРІ
         for (int i = 0; i < _prefabs.Count; i++)
         {
-            // если поле префаба пустое - игнорируем и в базу не вносим.
+            // РµСЃР»Рё РїРѕР»Рµ РїСЂРµС„Р°Р±Р° РїСѓСЃС‚РѕРµ - РёРіРЅРѕСЂРёСЂСѓРµРј Рё РІ Р±Р°Р·Сѓ РЅРµ РІРЅРѕСЃРёРј.
             if (_prefabs[i].prefab == null) continue;
 
             List<PopUpObject> _internalList;
@@ -49,7 +49,7 @@ public class BubblesPool : MonoBehaviour
 
             _pool[_prefabs[i].type] = _internalList;
 
-            // заодно заполняем словарь префабов
+            // Р·Р°РѕРґРЅРѕ Р·Р°РїРѕР»РЅСЏРµРј СЃР»РѕРІР°СЂСЊ РїСЂРµС„Р°Р±РѕРІ
             _prefabsDictionary[_prefabs[i].type] = _prefabs[i].prefab;
         }
     }
@@ -87,17 +87,17 @@ public class BubblesPool : MonoBehaviour
         PopUpObject obj;
         bool listExisting = false;
 
-        // ищем в пуле список объектов нужного нам типа
+        // РёС‰РµРј РІ РїСѓР»Рµ СЃРїРёСЃРѕРє РѕР±СЉРµРєС‚РѕРІ РЅСѓР¶РЅРѕРіРѕ РЅР°Рј С‚РёРїР°
         if (_pool.TryGetValue(type, out _internalList))
         {
             listExisting = true;
 
-            // ищем свободный объект
+            // РёС‰РµРј СЃРІРѕР±РѕРґРЅС‹Р№ РѕР±СЉРµРєС‚
             for (int i = 0; i < _internalList.Count; i++)
             {
                 if (_internalList[i].gameObject.activeSelf) continue;
 
-                // нашли подходящий - спавним и выходим из функции
+                // РЅР°С€Р»Рё РїРѕРґС…РѕРґСЏС‰РёР№ - СЃРїР°РІРЅРёРј Рё РІС‹С…РѕРґРёРј РёР· С„СѓРЅРєС†РёРё
                 _internalList[i].Init();
                 _internalList[i].gameObject.SetActive(true);
                 if (!_activeObjects.Contains(_internalList[i])) _activeObjects.Add(_internalList[i]);
@@ -105,7 +105,7 @@ public class BubblesPool : MonoBehaviour
             }
         }
 
-        // Если в пуле нет нужного списка, либо в списке нет свободных объектов - пробуем найти в словаре префабов нужный, создать список(при необходимости) и выполнить все что нужно.
+        // Р•СЃР»Рё РІ РїСѓР»Рµ РЅРµС‚ РЅСѓР¶РЅРѕРіРѕ СЃРїРёСЃРєР°, Р»РёР±Рѕ РІ СЃРїРёСЃРєРµ РЅРµС‚ СЃРІРѕР±РѕРґРЅС‹С… РѕР±СЉРµРєС‚РѕРІ - РїСЂРѕР±СѓРµРј РЅР°Р№С‚Рё РІ СЃР»РѕРІР°СЂРµ РїСЂРµС„Р°Р±РѕРІ РЅСѓР¶РЅС‹Р№, СЃРѕР·РґР°С‚СЊ СЃРїРёСЃРѕРє(РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё) Рё РІС‹РїРѕР»РЅРёС‚СЊ РІСЃРµ С‡С‚Рѕ РЅСѓР¶РЅРѕ.
         if (_prefabsDictionary.TryGetValue(type, out obj))
         {
             PopUpObject _prefab = InstantiateObject(obj);
@@ -128,7 +128,7 @@ public class BubblesPool : MonoBehaviour
         }
         else
         {
-            // иначе даем ошибку и возвращаем ноль
+            // РёРЅР°С‡Рµ РґР°РµРј РѕС€РёР±РєСѓ Рё РІРѕР·РІСЂР°С‰Р°РµРј РЅРѕР»СЊ
             if (listExisting) 
                 Debug.LogError("Can't find prefab of type <color=red><b>\"" + type + "\"</b></color> in prefab dictionary!");
             else

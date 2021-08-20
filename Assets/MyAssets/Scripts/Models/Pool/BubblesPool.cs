@@ -1,15 +1,16 @@
+//
+// Пул пузырей.
+// Работает больше как модель, т.к. занимается только хранением и созданием/выдачей объектов-пузырей по требованию.
+//
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public enum PopUpType { Bubble, ReverseBubble, DecreasingBubble }
 
-/// <summary>
-/// Working as in-world data-objects holder.
-/// </summary>
 public class BubblesPool : MonoBehaviour
 {
-    private PlayerController _player;
 
     [Header("Pool Settings")]
     [SerializeField]
@@ -26,22 +27,18 @@ public class BubblesPool : MonoBehaviour
     private List<PopUpObject> _activeObjects = new List<PopUpObject>();
 
 
-    public void Init(PlayerController player)
+    public void Init()
     {
-        _player = player;
         ClearAll();
         FillPool();
     }
 
-    /// <summary>
-    /// Initial filling of the pool
-    /// </summary>
     private void FillPool()
     {
-        // go through the list of prefabs
+        // проходимся по списку префабов
         for (int i = 0; i < _prefabs.Count; i++)
         {
-            // if the prefab field is empty, we ignore it and do not add it to the database.
+            // если поле префаба пустое - игнорируем и в базу не вносим.
             if (_prefabs[i].prefab == null) continue;
 
             List<PopUpObject> _internalList;
@@ -57,16 +54,11 @@ public class BubblesPool : MonoBehaviour
 
             _pool[_prefabs[i].type] = _internalList;
 
-            // at the same time we fill in the prefab dictionary
+            // заодно заполняем словарь префабов
             _prefabsDictionary[_prefabs[i].type] = _prefabs[i].prefab;
         }
     }
 
-    /// <summary>
-    /// Create exemplar of object
-    /// </summary>
-    /// <param name="prefab">Prefab of object variant</param>
-    /// <returns>Spawned object base class</returns>
     private PopUpObject InstantiateObject(PopUpObject prefab)
     {
         PopUpObject obj = Instantiate(prefab);
@@ -80,27 +72,6 @@ public class BubblesPool : MonoBehaviour
         return obj;
     }
 
-    /// <summary>
-    /// Spawn object of Type. </br>
-    /// Also this is the only one point where Init() of object is called.
-    /// </summary>
-    /// <param name="type">Type of object to spawn</param>
-    /// <returns>Spawned object base class</returns>
-    public PopUpObject Spawn(PopUpType type)
-    {
-        PopUpObject _object = FindAndSpawn(type);
-        _object.Init();
-
-        if (type == PopUpType.Bubble) _object.GenerateSize(_player.GetBubbleSizeX());
-        return _object;
-    }
-
-    /// <summary>
-    /// Spawn object of Type in selected position.
-    /// </summary>
-    /// <param name="type">Type of object to spawn</param>
-    /// <param name="position">Position to spawn</param>
-    /// <returns>Spawned object base class</returns>
     public PopUpObject Spawn(PopUpType type, Vector3 position)
     {
         PopUpObject obj = Spawn(type);
@@ -115,41 +86,35 @@ public class BubblesPool : MonoBehaviour
         return obj;
     }
 
-    /// <summary>
-    /// Find object of Type in dictionary, or create new if no free objects.
-    /// </summary>
-    /// <param name="type">Type of object to spawn</param>
-    /// <returns>Spawned object base class</returns>
-    public PopUpObject FindAndSpawn(PopUpType type)
+    public PopUpObject Spawn(PopUpType type)
     {
         List<PopUpObject> _internalList;
         PopUpObject obj;
         bool listExisting = false;
 
-        // looking in the pool for a list of objects of the type we need
+        // ищем в пуле список объектов нужного нам типа
         if (_pool.TryGetValue(type, out _internalList))
         {
             listExisting = true;
 
-            // looking for a free object
+            // ищем свободный объект
             for (int i = 0; i < _internalList.Count; i++)
             {
                 if (_internalList[i].gameObject.activeSelf) continue;
 
-                // found a suitable one - spawn and exit the function
+                // нашли подходящий - спавним и выходим из функции
+                _internalList[i].Init();
                 _internalList[i].gameObject.SetActive(true);
                 if (!_activeObjects.Contains(_internalList[i])) _activeObjects.Add(_internalList[i]);
                 return _internalList[i];
             }
         }
 
-        /* 
-         * If the pool does not contain the required list, or there are no free objects in the list,
-         * we try to find the desired one in the prefab dictionary, create a list (if necessary) and do everything that is needed.
-         */
+        // Если в пуле нет нужного списка, либо в списке нет свободных объектов - пробуем найти в словаре префабов нужный, создать список(при необходимости) и выполнить все что нужно.
         if (_prefabsDictionary.TryGetValue(type, out obj))
         {
             PopUpObject _prefab = InstantiateObject(obj);
+            _prefab.Init();
             _prefab.gameObject.SetActive(true);
 
             if (listExisting)
@@ -168,7 +133,7 @@ public class BubblesPool : MonoBehaviour
         }
         else
         {
-            // throw error and return null
+            // иначе даем ошибку и возвращаем ноль
             if (listExisting) 
                 Debug.LogError("Can't find prefab of type <color=red><b>\"" + type + "\"</b></color> in prefab dictionary!");
             else
@@ -178,10 +143,13 @@ public class BubblesPool : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Get active objects data
-    /// </summary>
-    /// <returns>List of active objects or count of this list</returns>
+    public void Return(PopUpObject obj)
+    {
+        if (obj.gameObject.activeSelf) obj.gameObject.SetActive(false);
+        if (obj.transform.parent != transform) obj.transform.SetParent(transform);
+        if (_activeObjects.Contains(obj)) _activeObjects.Remove(obj);
+    }
+
     public List<PopUpObject> GetActiveObjects()
     {
         return _activeObjects;
@@ -190,20 +158,7 @@ public class BubblesPool : MonoBehaviour
     {
         return _activeObjects.Count;
     }
-    /// <summary>
-    /// Return object to pool
-    /// </summary>
-    /// <param name="obj">Object to return</param>
-    public void Return(PopUpObject obj)
-    {
-        if (obj.gameObject.activeSelf) obj.gameObject.SetActive(false);
-        if (obj.transform.parent != transform) obj.transform.SetParent(transform);
-        if (_activeObjects.Contains(obj)) _activeObjects.Remove(obj);
-    }
 
-    /// <summary>
-    /// Clear All lists in pool.
-    /// </summary>
     private void ClearAll()
     {
         foreach (PopUpType type in System.Enum.GetValues(typeof(PopUpType)))
@@ -219,10 +174,6 @@ public class BubblesPool : MonoBehaviour
         ClearPopUpList(_activeObjects);
     }
 
-    /// <summary>
-    /// Clear selected list
-    /// </summary>
-    /// <param name="list">List to clear</param>
     private void ClearPopUpList(List<PopUpObject> list)
     {
         for (int i = 0; i < list.Count; i++)

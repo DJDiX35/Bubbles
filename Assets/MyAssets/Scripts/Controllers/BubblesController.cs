@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Control all bubble (except player) movements during lifetime.
-/// </summary>
 public class BubblesController : MonoBehaviour
 {
     private Settings _settings;
@@ -12,14 +9,14 @@ public class BubblesController : MonoBehaviour
     private Timer _timer;
     private float _spawnDelay;
 
-    private int _spawnCount = 1;
+    private int _spawnCount = 1; // каунтер на спавн после первых заспавленных пузырей
 
     private Vector2 _spawnBorders = new Vector2(1, 1);
 
     private List<PopUpObject> _objects = new List<PopUpObject>();
     private List<PopUpObject> _toRemove = new List<PopUpObject>();
 
-    private bool active = false;    // Stub to avoid doing Update BEFORE initializing. I'll come up with a better option - I'll replace it. I think it's ugly to turn off the script in the editor in advance.
+    private bool active = false;    // Временное решение чтобы избежать выполнения Update ДО инициализации. Придумаю вариант лучше - заменю. выключать скрипт в редакторе заранее считаю некрасивым.
 
     public void Init(
         Settings settings,
@@ -29,6 +26,7 @@ public class BubblesController : MonoBehaviour
     {
         _settings = settings;
         _pool = pool;
+        pool.Init();
         _timer = timer;
 
         _spawnBorders = CameraExtensions.OrthographicBoundsVector2(Camera.main);
@@ -55,7 +53,7 @@ public class BubblesController : MonoBehaviour
 
 
     /// <summary>
-    /// Update. Dont lost it. It's here.
+    /// Update. Не терем, он тут.
     /// </summary>
     void Update()
     {
@@ -82,10 +80,7 @@ public class BubblesController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Checking bubble for "allow to die"
-    /// </summary>
-    /// <param name="bubble">Bubble to check</param>
+
     private void CheckBubbleLife(PopUpObject bubble)
     {
         if (bubble.transform.position.y < _spawnBorders.y) return;
@@ -95,7 +90,7 @@ public class BubblesController : MonoBehaviour
     }
 
     /// <summary>
-    /// Removing the bubbles that are in the "toRemove" list.
+    /// Удаляем пузырьки находящиеся в списке "на удаление".
     /// </summary>
     private void ClearTrashCan()
     {
@@ -114,6 +109,8 @@ public class BubblesController : MonoBehaviour
         _spawnCount = 1;
 
         ClearPopUpList(_objects);
+
+        //SpawnBubbles(_settings.bubbles.StartCount);
     }
 
     private void StopSpawn()
@@ -121,10 +118,7 @@ public class BubblesController : MonoBehaviour
         ClearPopUpList(_objects);
     }
 
-    /// <summary>
-    /// Spawn many bubbles
-    /// </summary>
-    /// <param name="count">Spawn quantity</param>
+
     private void SpawnBubbles(int count)
     {
         for (int i = 0; i < count; i++)
@@ -133,10 +127,6 @@ public class BubblesController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Spawn one bubble of selected Type
-    /// </summary>
-    /// <param name="type">Type to spawn</param>
     private void SpawnOneBubble(PopUpType type = PopUpType.Bubble)
     {
         _objects.Add(
@@ -147,15 +137,12 @@ public class BubblesController : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Clear list of active bubbles and remove all objects back to pool
-    /// </summary>
-    /// <param name="list">List to Clear</param>
+
     private void ClearPopUpList(List<PopUpObject> list)
     {
         for (int i = 0; i < list.Count; i++)
         {
-            _objects.Remove(list[i]);
+            Destroy(list[i].gameObject);
         }
         list.Clear();
     }

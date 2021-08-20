@@ -1,11 +1,16 @@
+//
+// Application-тип класса. Применяемая модель - псевдо A-MVC с поправкой на структуру Юнити.
+// GameManager - ЕДИНАЯ точка входа в приложение, которая инициализирует уже все остальные скрипты,
+// заодно скидывая им только те ссылки, которые будут нужны при работе.
+// Никто не знает ни о чем кроме того, что им предоставил GameManager при инициализации.
+// Тем самым избегаем глобальных переменных, Service Locator, DI и прочих возможных лапшевидных вещей.
+//
+
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// GameManager is Application-Type class. The only entry point to the application.
-/// GameManager initializes all other scripts, and also gives them only those links that are required for these scripts to work.
-/// Nobody knows about anything other than what the GameManager gave them upon initialization.
-/// Thus, we avoid global variables, Service Locator, DI and other possible noodle-like things.
-/// </summary>
+
 public class GameManager : MonoBehaviour
 {
     [Header("Models / Pools / Settings")]
@@ -40,10 +45,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
-        // init models/pools
-        _bubblesPool.Init(_playerController);
-
         // init views/views controllers
         _mainCanvasController.Init(_levelController);
 

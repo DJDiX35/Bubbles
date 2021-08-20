@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Control all Player Bubble movements
+/// </summary>
 public class PlayerController : MonoBehaviour
 {
     private Settings.Game _game;
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
         Subscribe(settings, input);
     }
+
     #region Subscribe
     private void Subscribe(
         Settings settings, 
@@ -80,28 +82,36 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 CheckOutOfBounds(Vector3 position, float accuracy)
     {
-        // по иксу уровень зациклен. ”летели за границу - по¤вились с другой стороны.
+        // radius
+        float r = _playerBubble.localScale.x * 0.5f;
+
+        // on the X level is looped. Flew abroad - appeared from the other side.
         if (position.x < -_bounds.x) position.x = _bounds.x - accuracy;
         if (position.x > _bounds.x) position.x = -_bounds.x + accuracy;
 
-        // по y - либо зацикленность либо упираемс¤ и не идем дальше, на выбор. –асскомментировать необходимое.
+        // on y - either looping or we stop and do not go further, to choose from. Uncomment what is needed.
 
-        // зацикленность
+        // loop
         /*if (position.y < -_bounds.y) position.y = _bounds.y - accuracy;
         if (position.y > _bounds.y) position.y = -_bounds.y + accuracy;*/
 
-        // жестка¤ граница
-        if (position.y < -_bounds.y + 0.1f)
+        // hard border
+        if (position.y < -_bounds.y + r)
         {
-            position.y = -_bounds.y + 0.1f + accuracy;
+            position.y = -_bounds.y + r + accuracy;
             _player.HitBorder(Settings.PlayerSettings.BorderType.Vertical);
         }
-        if (position.y > _bounds.y - 0.1f)
+        if (position.y > _bounds.y - (r))
         {
-            position.y = _bounds.y - 0.1f - accuracy;
+            position.y = _bounds.y - (r + accuracy);
             _player.HitBorder(Settings.PlayerSettings.BorderType.Vertical);
         }
 
         return position;
+    }
+
+    public float GetBubbleSizeX()
+    {
+        return _playerBubble.transform.localScale.x;
     }
 }

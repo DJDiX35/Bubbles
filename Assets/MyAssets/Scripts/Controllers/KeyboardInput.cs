@@ -1,9 +1,8 @@
-//
-// Универсальный контроллер управления с клавиатуры
-//
-
 using UnityEngine;
 
+/// <summary>
+/// Universal Keyboard controller
+/// </summary>
 public class KeyboardInput : InputBase
 {
     private Settings.Game _game;
@@ -45,7 +44,7 @@ public class KeyboardInput : InputBase
         }
         if (Input.GetKey(KeyCode.W))
         {
-            if (direction.y < _maxSpeed) direction.y += _acceleration * 1.5f * Time.deltaTime; // ìû - ïóçûðü. Ïîäúåì âñåãäà ëåã÷å ÷åì ñïóñê.
+            if (direction.y < _maxSpeed) direction.y += _acceleration * 1.5f * Time.deltaTime; // We are a bubble. The ascent is always easier than the descent
         }
         if (Input.GetKey(KeyCode.S))
         {
@@ -61,19 +60,19 @@ public class KeyboardInput : InputBase
     }
 
     /// <summary>
-    /// Если все кнопки отпущены - постепенно замедляем движение
+    /// If all buttons are released - gradually slow down the movement
     /// </summary>
     private void SlowDownAtKeyRelease()
     {
-        // замедление по оси X
+        // X-axis deceleration
         if (direction.x != 0 && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
         {
             direction.x = Mathf.MoveTowards(direction.x, 0, _acceleration * 2f * Time.deltaTime);
         }
-        // замедление по оси Y
+        // Y-axis deceleration
         if (direction.y != 0 && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
         {
-            // так как у нас в управлении пузырь - замедление вниз более активное, чем вверх
+            // since control a bubble - slowing down is more active than up
             if (direction.y > 0)
                 direction.y = Mathf.MoveTowards(direction.y, 0, _acceleration * 0.5f * Time.deltaTime);
             else

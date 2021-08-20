@@ -1,6 +1,4 @@
-using UnityEngine;
-
-// ”ниверсальный мультипроектный класс
+// Universal multiproject class
 [System.Serializable]
 public class MinMaxTypes
 {

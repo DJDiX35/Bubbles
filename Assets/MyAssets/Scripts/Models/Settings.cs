@@ -1,13 +1,10 @@
-//
-// Игровые настройки. Модель. Часть настроек редактирется напрямую из редактора.
-// По логике - не изменяемо все, кроме стейта игры. Возможно стоит его как-то вынести из Game.
-// Так же по логике MVC эвенты должны быть в модели данных, но можно было бы вынести в отдельную модель чисто для эвентов.
-//
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Game settings. Model. Some of the settings are edited directly from the editor.
+/// Logically, everything is not changeable, except for the state of the game. Perhaps it is worth taking it out of the Game somehow.
+/// Also, according to the MVC logic, events should be in the data model, but it could be moved into a separate model purely for events.
+/// </summary>
 public enum GameState { MainMenu, GameStart, GamePlay, GameLose }
 public class Settings : MonoBehaviour
 {
@@ -24,7 +21,7 @@ public class Settings : MonoBehaviour
             } 
             set
             {
-                if (_state != value)     //Эвент о смене стейта должен быть отправлен только если стейт РЕАЛЬНО изменился.
+                if (_state != value)     // A state change event should only be sent if the state has REALLY changed.
                 {
                     _state = value;
                     StateChanged();
@@ -103,7 +100,7 @@ public class Settings : MonoBehaviour
         public float StartSize { get { return _startSize; } }
 
         #region Player Events
-        public enum BorderType { Horizontal, Vertical } // Следует переместить энумератор в другое место. Слишком длинная строка обращения.
+        public enum BorderType { Horizontal, Vertical } // Need move the enumerator to a different location. The request string is too long.
 
         public delegate void HitBorderEvent(BorderType borderType);
         public event HitBorderEvent HitBorderEv;
@@ -133,8 +130,7 @@ public class Settings : MonoBehaviour
         private float _spawnDelay = 0.5f;
         public float SpawnDelay { get { return _spawnDelay; } }
     }
-    // readonly не поставить т.к. теряем отображение в эдиторе. В метод не перенести т.к. требуется быстрый доступ к переменным.
-    // есть вариант метод + кеширование переменных в используемых контроллерах. Надо подумать.
+    // Possible to change this to "method + number caching" in the controllers used.
     public BubblesSettings bubbles = new BubblesSettings();
     #endregion
 }

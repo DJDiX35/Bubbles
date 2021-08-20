@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Some useful functions to 2D cam
+/// </summary>
 public static class CameraExtensions
 {
     public static Vector2 OrthographicBoundsVector2(this Camera camera)

@@ -2,35 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Base Bubble class
+/// </summary>
 [RequireComponent(typeof(CircleCollider2D))]
 public class Bubble : PopUpObject
 {
     [SerializeField]
-    private MinMaxTypes.Float _sizeDelta = new MinMaxTypes.Float() { min = 1f, max = 5f };
+    private float _sizeDelta = 0.5f;
 
-    public float Size { get; private set; }
-
-    [SerializeField]
-    private CircleCollider2D _collider;
-
-    public override void Init()
+    public override void GenerateSize(float size)
     {
-        base.Init();
-
-        GenerateAndApplySize();
-        SetColliderData();
+        float _size = Random.Range(size * (1 - _sizeDelta), size * (1 + _sizeDelta));
+        transform.localScale = new Vector3(_size, _size, 1f);
     }
-
-    private void GenerateAndApplySize()
-    {
-        Size = Random.Range(_sizeDelta.min, _sizeDelta.max);
-        transform.localScale = new Vector3(Size, Size, 1f);
-    }
-    private void SetColliderData()
-    {
-        if (_collider == null) _collider = GetComponent<CircleCollider2D>();
-
-        if (!_collider.isTrigger) _collider.isTrigger = true;
-    }
-
 }

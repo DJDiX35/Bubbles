@@ -37,12 +37,12 @@ public class BubblesController : MonoBehaviour
 
         ClearPopUpList(_objects);
 
-        Subscrive();
+        Subscribe();
 
         active = true;
     }
 
-    private void Subscrive()
+    private void Subscribe()
     {
         _settings.level.StartEv -= StartSpawn;
         _settings.level.StartEv -= StartSpawn;

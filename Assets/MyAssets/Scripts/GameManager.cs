@@ -4,7 +4,6 @@ using UnityEngine;
 /// GameManager is Application-Type class. The only entry point to the application.
 /// GameManager initializes all other scripts, and also gives them only those links that are required for these scripts to work.
 /// Nobody knows about anything other than what the GameManager gave them upon initialization.
-/// Thus, we avoid global variables, Service Locator, DI and other possible noodle-like things.
 /// </summary>
 public class GameManager : MonoBehaviour
 {

@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     private Settings _gameSettings;
 
     [SerializeField]
-    private BubblesPool _bubblesPool;
+    private BubblesPool _bubblesPool;   // In other way pool can be used as controller + data holder script, but it will be too overwhelming for so small project.
 
 
     [Header("Views")]
